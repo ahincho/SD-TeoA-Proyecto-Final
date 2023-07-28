@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   ### PostgreSQL Database for Inventory
   db-inventory:
@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: developer
       POSTGRES_PASSWORD: ahincho
     ports:
-      - 5440:5432
+      - "5440:5432"
     expose:
       - 5432
   ### MySQL Database for Orders
@@ -24,19 +24,19 @@ services:
       MYSQL_PASSWORD: ahincho
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - 3310:3306
+      - "3310:3306"
     expose:
       - 3306
-  ### PostgreSQL Database for Products
+  ### MariaDB Database for Products
   db-products:
     container_name: db-products
-    image: postgres:15.3
+    image: mariadb:11.0.2
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ms_products
-      POSTGRES_USER: developer
-      POSTGRES_PASSWORD: ahincho
+      MYSQL_DATABASE: ms_products
+      MYSQL_USER: developer
+      MYSQL_PASSWORD: ahincho
     ports:
-      - 5441:5432
+      - "5441:3306"
     expose:
-      - 5432
+      - 3306
