@@ -33,9 +33,10 @@ services:
     image: mariadb:11.0.2
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ms_products
-      MYSQL_USER: developer
-      MYSQL_PASSWORD: ahincho
+      MARIADB_DATABASE: ms_products
+      MARIADB_USER: developer
+      MARIADB_PASSWORD: ahincho
+      MARIADB_ROOT_PASSWORD: root
     ports:
       - "3320:3306"
     expose:
