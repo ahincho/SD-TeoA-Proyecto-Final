@@ -7,6 +7,7 @@ public interface JpaUserAdapter {
 
     List<User> list();
     User getById(Long id);
+    User getByDocument(String document);
     User save(User user);
     User update(Long id, User user);
     User delete(Long id);

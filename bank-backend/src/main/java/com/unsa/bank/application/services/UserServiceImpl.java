@@ -27,6 +27,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByDocument(String document) {
+        return userRepository.findByDocument(document).orElse(null);
+    }
+
+    @Override
     public User saveUser(User user) {
         return userRepository.save(user);
     }
@@ -38,9 +43,11 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         User userToUpdate = optionalUser.get();
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setPassword(user.getPassword());
+        userToUpdate.setDocument(user.getDocument());
         userToUpdate.setFirstname(user.getFirstname());
         userToUpdate.setLastname(user.getLastname());
-        userToUpdate.setDocument(userToUpdate.getDocument());
         return userRepository.save(userToUpdate);
     }
 

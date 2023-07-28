@@ -30,6 +30,13 @@ public class UserController implements JpaUserAdapter {
     }
 
     @Override
+    @GetMapping("/d/{doc}")
+    @ResponseStatus(HttpStatus.OK)
+    public User getByDocument(@PathVariable("doc") String document) {
+        return userService.getUserByDocument(document);
+    }
+
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User save(@RequestBody User user) {

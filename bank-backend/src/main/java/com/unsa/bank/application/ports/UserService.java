@@ -7,6 +7,7 @@ public interface UserService {
 
     List<User> getAll();
     User getUserById(Long id);
+    User getUserByDocument(String document);
     User saveUser(User user);
     User updateUser(Long id, User user);
     User deleteUser(Long id);
