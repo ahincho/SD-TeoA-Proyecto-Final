@@ -6,7 +6,7 @@ import java.util.List;
 public interface JpaUserAdapter {
 
     List<User> list();
-    User getById();
+    User getById(Long id);
     User save(User user);
     User update(Long id, User user);
     User delete(Long id);
