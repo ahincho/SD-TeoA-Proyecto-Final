@@ -37,6 +37,6 @@ services:
       MYSQL_USER: developer
       MYSQL_PASSWORD: ahincho
     ports:
-      - "5441:3306"
+      - "3320:3306"
     expose:
       - 3306
