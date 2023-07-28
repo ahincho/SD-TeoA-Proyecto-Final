@@ -1,0 +1,42 @@
+version: '3'
+services:
+  ### PostgreSQL Database for Inventory
+  db-inventory:
+    container_name: db-inventory
+    image: postgres:15.3
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ms_inventory
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: ahincho
+    ports:
+      - 5440:5432
+    expose:
+      - 5432
+  ### MySQL Database for Orders
+  db-orders:
+    container_name: db-orders
+    image: mysql:8.0.33
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ms_orders
+      MYSQL_USER: developer
+      MYSQL_PASSWORD: ahincho
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3310:3306
+    expose:
+      - 3306
+  ### PostgreSQL Database for Products
+  db-products:
+    container_name: db-products
+    image: postgres:15.3
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ms_products
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: ahincho
+    ports:
+      - 5441:5432
+    expose:
+      - 5432
