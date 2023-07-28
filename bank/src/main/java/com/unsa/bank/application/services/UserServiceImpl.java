@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
         User userToUpdate = optionalUser.get();
         userToUpdate.setFirstname(user.getFirstname());
         userToUpdate.setLastname(user.getLastname());
+        userToUpdate.setDocument(userToUpdate.getDocument());
         return userRepository.save(userToUpdate);
     }
 
