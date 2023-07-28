@@ -37,16 +37,16 @@ public class UserController implements JpaUserAdapter {
     }
 
     @Override
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public User update(Long id, User user) {
+    public User update(@PathVariable Long id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
     @Override
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User delete(Long id) {
+    public User delete(@PathVariable Long id) {
         return userService.deleteUser(id);
     }
 
