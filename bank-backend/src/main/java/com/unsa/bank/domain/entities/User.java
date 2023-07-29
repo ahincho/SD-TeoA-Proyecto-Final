@@ -5,6 +5,11 @@ import jakarta.validation.constraints.NotNull;
 
 import lombok.*;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
+
+import java.time.LocalDateTime;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +33,10 @@ public class User {
     private String firstname;
     @NotNull
     private String lastname;
+    @CreationTimestamp
+    private LocalDateTime creationDate;
+    @CurrentTimestamp
+    private LocalDateTime updateDate;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
 
