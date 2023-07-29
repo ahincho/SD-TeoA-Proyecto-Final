@@ -1,11 +1,14 @@
 package com.unsa.bank.application.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
+
 import com.unsa.bank.application.ports.UserService;
 import com.unsa.bank.domain.entities.User;
 import com.unsa.bank.domain.repositories.UserRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +32,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByDocument(String document) {
         return userRepository.findByDocument(document).orElse(null);
+    }
+
+    @Override
+    public User getUserByEmailAndPassword(String email, String password) {
+        return userRepository.findByEmailAndPassword(email, password).orElse(null);
     }
 
     @Override

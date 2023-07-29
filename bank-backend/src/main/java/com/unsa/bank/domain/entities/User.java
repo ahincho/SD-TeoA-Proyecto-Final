@@ -1,13 +1,14 @@
 package com.unsa.bank.domain.entities;
 
 import jakarta.persistence.*;
+
 import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames =  "document") })
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames =  {"document", "email"}) })
 @Setter @Getter @Builder
 @AllArgsConstructor
 @NoArgsConstructor

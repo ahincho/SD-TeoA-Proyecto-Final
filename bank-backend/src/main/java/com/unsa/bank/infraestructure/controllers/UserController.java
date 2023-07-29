@@ -1,11 +1,13 @@
 package com.unsa.bank.infraestructure.controllers;
 
-import com.unsa.bank.application.ports.UserService;
-import com.unsa.bank.domain.entities.User;
-import com.unsa.bank.infraestructure.adapters.JpaUserAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import com.unsa.bank.infraestructure.adapters.JpaUserAdapter;
+import com.unsa.bank.application.ports.UserService;
+import com.unsa.bank.domain.entities.User;
+
 import java.util.List;
 
 @RestController
@@ -34,6 +36,13 @@ public class UserController implements JpaUserAdapter {
     @ResponseStatus(HttpStatus.OK)
     public User getByDocument(@PathVariable("doc") String document) {
         return userService.getUserByDocument(document);
+    }
+
+    @Override
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public User getByEmailAndPassword(@RequestBody String email, @RequestBody String password) {
+        return userService.getUserByEmailAndPassword(email, password);
     }
 
     @Override
