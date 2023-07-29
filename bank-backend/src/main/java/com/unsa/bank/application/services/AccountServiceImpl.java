@@ -73,7 +73,7 @@ public class AccountServiceImpl implements AccountService {
         Double amount = movementRequest.getAmount();
         account.setBalance(account.getBalance() + amount);
         Account addedBalaceAccount = accountRepository.save(account);
-        return mapAccountToMovementResponse(addedBalaceAccount);
+        return mapAccountToMovementResponse(addedBalaceAccount, amount);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class AccountServiceImpl implements AccountService {
         }
         account.setBalance(account.getBalance() - amount);
         Account decreasedBalanceAccount = accountRepository.save(account);
-        return mapAccountToMovementResponse(decreasedBalanceAccount);
+        return mapAccountToMovementResponse(decreasedBalanceAccount, amount * -1);
     }
 
     private AccountResponse mapAccountToAccountResponse(Account account) {
@@ -102,10 +102,11 @@ public class AccountServiceImpl implements AccountService {
                 .build();
     }
 
-    private MovementResponse mapAccountToMovementResponse(Account account) {
+    private MovementResponse mapAccountToMovementResponse(Account account, Double amount) {
         return MovementResponse.builder()
                 .accountId(account.getId())
                 .balance(account.getBalance())
+                .amount(amount)
                 .build();
     }
 

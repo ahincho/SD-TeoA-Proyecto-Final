@@ -12,5 +12,6 @@ public class MovementResponse {
 
     private Long accountId;
     private Double balance;
+    private Double amount;
 
 }
