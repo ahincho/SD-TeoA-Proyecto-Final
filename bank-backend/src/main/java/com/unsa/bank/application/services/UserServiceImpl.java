@@ -10,7 +10,6 @@ import com.unsa.bank.domain.repositories.UserRepository;
 import com.unsa.bank.domain.dtos.UserRequest;
 import com.unsa.bank.domain.dtos.UserResponse;
 import com.unsa.bank.domain.entities.User;
-import com.unsa.bank.domain.entities.Account;
 
 import java.util.List;
 import java.util.Optional;

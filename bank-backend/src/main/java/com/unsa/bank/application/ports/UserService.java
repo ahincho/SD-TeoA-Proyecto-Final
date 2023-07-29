@@ -1,7 +1,6 @@
 package com.unsa.bank.application.ports;
 
 import com.unsa.bank.domain.dtos.UserResponse;
-import org.springframework.web.servlet.function.EntityResponse;
 
 import com.unsa.bank.domain.dtos.UserRequest;
 
