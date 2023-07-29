@@ -6,11 +6,15 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
 import com.unsa.bank.application.ports.UserService;
-import com.unsa.bank.domain.entities.User;
 import com.unsa.bank.domain.repositories.UserRepository;
+import com.unsa.bank.domain.dtos.UserRequest;
+import com.unsa.bank.domain.dtos.UserResponse;
+import com.unsa.bank.domain.entities.User;
+import com.unsa.bank.domain.entities.Account;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.HashSet;
 
 @Service
 @Transactional
@@ -20,54 +24,75 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<UserResponse> getAll() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(this::mapUserToUserResponse).toList();
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public User getUserByDocument(String document) {
-        return userRepository.findByDocument(document).orElse(null);
-    }
-
-    @Override
-    public User getUserByEmailAndPassword(String email, String password) {
-        return userRepository.findByEmailAndPassword(email, password).orElse(null);
-    }
-
-    @Override
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User updateUser(Long id, User user) {
+    public UserResponse getUserById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isEmpty()) {
-            return null;
-        }
-        User userToUpdate = optionalUser.get();
-        userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setPassword(user.getPassword());
-        userToUpdate.setDocument(user.getDocument());
-        userToUpdate.setFirstname(user.getFirstname());
-        userToUpdate.setLastname(user.getLastname());
-        return userRepository.save(userToUpdate);
+        return optionalUser.map(this::mapUserToUserResponse).orElse(null);
     }
 
     @Override
-    public User deleteUser(Long id) {
+    public UserResponse getUserByDocument(String document) {
+        Optional<User> optionalUser = userRepository.findByDocument(document);
+        return optionalUser.map(this::mapUserToUserResponse).orElse(null);
+    }
+
+    @Override
+    public UserResponse getUserByEmailAndPassword(String email, String password) {
+        Optional<User> optionalUser = userRepository.findByEmailAndPassword(email, password);
+        return optionalUser.map(this::mapUserToUserResponse).orElse(null);
+    }
+
+    @Override
+    public UserResponse saveUser(UserRequest userRequest) {
+        User savedUser = userRepository.save(mapUserRequestToUser(userRequest));
+        savedUser.setAccounts(new HashSet<Account>());
+        return mapUserToUserResponse(savedUser);
+    }
+
+    @Override
+    public UserResponse updateUser(Long id, UserRequest userRequest) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) { return null; }
+        User userToUpdate = mapUserRequestToUser(userRequest);
+        userToUpdate.setId(id);
+        userToUpdate.setAccounts(optionalUser.get().getAccounts());
+        return mapUserToUserResponse(userRepository.save(userToUpdate));
+    }
+
+    @Override
+    public UserResponse deleteUser(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
             return null;
         }
         User userToDelete = optionalUser.get();
         userRepository.delete(userToDelete);
-        return userToDelete;
+        return mapUserToUserResponse(userToDelete);
+    }
+
+    private UserResponse mapUserToUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .document(user.getDocument())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .accounts(user.getAccounts())
+                .build();
+    }
+
+    private User mapUserRequestToUser(UserRequest userRequest) {
+        return User.builder()
+                .email(userRequest.getEmail())
+                .password(userRequest.getPassword())
+                .document(userRequest.getDocument())
+                .firstname(userRequest.getFirstname())
+                .lastname(userRequest.getLastname())
+                .build();
     }
 
 }

@@ -1,17 +1,20 @@
 package com.unsa.bank.infraestructure.adapters;
 
-import com.unsa.bank.domain.entities.User;
+import org.springframework.http.ResponseEntity;
+
+import com.unsa.bank.domain.dtos.UserRequest;
+import com.unsa.bank.domain.dtos.UserResponse;
 
 import java.util.List;
 
 public interface JpaUserAdapter {
 
-    List<User> list();
-    User getById(Long id);
-    User getByDocument(String document);
-    User getByEmailAndPassword(String email, String password);
-    User save(User user);
-    User update(Long id, User user);
-    User delete(Long id);
+    ResponseEntity<List<UserResponse>> list();
+    ResponseEntity<UserResponse> getById(Long id);
+    ResponseEntity<UserResponse> getByDocument(String document);
+    ResponseEntity<UserResponse> getByEmailAndPassword(String email, String password);
+    ResponseEntity<UserResponse> save(UserRequest user);
+    ResponseEntity<UserResponse> update(Long id, UserRequest user);
+    ResponseEntity<UserResponse> delete(Long id);
 
 }

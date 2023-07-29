@@ -1,17 +1,20 @@
 package com.unsa.bank.application.ports;
 
-import com.unsa.bank.domain.entities.User;
+import com.unsa.bank.domain.dtos.UserResponse;
+import org.springframework.web.servlet.function.EntityResponse;
+
+import com.unsa.bank.domain.dtos.UserRequest;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<User> getAll();
-    User getUserById(Long id);
-    User getUserByDocument(String document);
-    User getUserByEmailAndPassword(String email, String password);
-    User saveUser(User user);
-    User updateUser(Long id, User user);
-    User deleteUser(Long id);
+    List<UserResponse> getAll();
+    UserResponse getUserById(Long id);
+    UserResponse getUserByDocument(String document);
+    UserResponse getUserByEmailAndPassword(String email, String password);
+    UserResponse saveUser(UserRequest userRequest);
+    UserResponse updateUser(Long id, UserRequest userRequest);
+    UserResponse deleteUser(Long id);
 
 }
