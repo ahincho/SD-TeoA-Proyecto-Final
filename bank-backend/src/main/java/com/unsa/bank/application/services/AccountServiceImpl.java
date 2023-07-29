@@ -1,80 +1,116 @@
 package com.unsa.bank.application.services;
 
-import com.unsa.bank.domain.entities.Account;
-import com.unsa.bank.domain.repositories.AccountRepository;
-import com.unsa.bank.application.ports.AccountService;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.unsa.bank.domain.dtos.MovementRequest;
+import com.unsa.bank.domain.dtos.MovementResponse;
+
 import org.springframework.stereotype.Service;
+
+import lombok.AllArgsConstructor;
+
+import jakarta.transaction.Transactional;
+
+import com.unsa.bank.application.ports.AccountService;
+import com.unsa.bank.domain.repositories.AccountRepository;
+import com.unsa.bank.domain.repositories.UserRepository;
+import com.unsa.bank.domain.dtos.AccountRequest;
+import com.unsa.bank.domain.dtos.AccountResponse;
+import com.unsa.bank.domain.entities.Account;
+import com.unsa.bank.domain.entities.User;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    @Autowired
     AccountRepository accountRepository;
+    UserRepository userRepository;
 
     @Override
-    public List<Account> getAll() {
-        return accountRepository.findAll();
+    public List<AccountResponse> getAll() {
+        List<Account> accounts = accountRepository.findAll();
+        return accounts.stream().map(this::mapAccountToAccountResponse).toList();
     }
 
     @Override
-    public Account getAccountById(Long id) {
-        return accountRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public Account saveAccount(Account account) {
-        return accountRepository.save(account);
-    }
-
-    @Override
-    public Account updateAccount(Long id, Account account) {
+    public AccountResponse getAccountById(Long id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
-        if (optionalAccount.isEmpty()) {
+        return optionalAccount.map(this::mapAccountToAccountResponse).orElse(null);
+    }
+
+    @Override
+    public AccountResponse createAccount(AccountRequest accountRequest) {
+        Optional<User> optionalUser = userRepository.findById(accountRequest.getUserId());
+        if (optionalUser.isEmpty()) {
             return null;
         }
-        Account accountToUpdate = optionalAccount.get();
-        accountToUpdate.setUser(account.getUser());
-        accountToUpdate.setBalance(account.getBalance());
-        return accountRepository.save(accountToUpdate);
+        Account account = new Account();
+        account.setUser(optionalUser.get());
+        account.setBalance(0.0);
+        return mapAccountToAccountResponse(accountRepository.save(account));
     }
 
     @Override
-    public Account deleteAccount(Long id) {
+    public AccountResponse deleteAccount(Long id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         if (optionalAccount.isEmpty()) {
             return null;
         }
         Account accountToDelete = optionalAccount.get();
         accountRepository.delete(accountToDelete);
-        return accountToDelete;
+        return mapAccountToAccountResponse(accountToDelete);
     }
 
     @Override
-    public Account addBalance(Long id, Double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount to be added must be greater than 0.");
+    public MovementResponse addBalance(MovementRequest movementRequest) {
+        Optional<Account> optionalAccount = mapMovementRequestToAccount(movementRequest);
+        if (optionalAccount.isEmpty() || movementRequest.getAmount() <= 0) {
+            return null;
         }
-        Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No se encontró la cuenta con ID: " + id));
+        Account account = optionalAccount.get();
+        Double amount = movementRequest.getAmount();
         account.setBalance(account.getBalance() + amount);
-        return account;
+        Account addedBalaceAccount = accountRepository.save(account);
+        return mapAccountToMovementResponse(addedBalaceAccount);
     }
 
     @Override
-    public Account decreaseBalance(Long id, Double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount to be added must be greater than 0.");
+    public MovementResponse decreaseBalance(MovementRequest movementRequest) {
+        Optional<Account> optionalAccount = mapMovementRequestToAccount(movementRequest);
+        if (optionalAccount.isEmpty()) {
+            return null;
         }
-        Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No se encontró la cuenta con ID: " + id));
-        if (amount > account.getBalance()) {
-            throw new IllegalArgumentException("Insufficient balance to make the withdrawal");
+        Account account = optionalAccount.get();
+        Double amount = movementRequest.getAmount();
+        if (amount <= 0 || amount > account.getBalance()) {
+            return null;
         }
         account.setBalance(account.getBalance() - amount);
-        return account;
+        Account decreasedBalanceAccount = accountRepository.save(account);
+        return mapAccountToMovementResponse(decreasedBalanceAccount);
+    }
+
+    private AccountResponse mapAccountToAccountResponse(Account account) {
+        return AccountResponse.builder()
+                .id(account.getId())
+                .userId(account.getUser().getId())
+                .creationDate(account.getCreationDate())
+                .updateDate(account.getUpdateDate())
+                .balance(account.getBalance())
+                .build();
+    }
+
+    private MovementResponse mapAccountToMovementResponse(Account account) {
+        return MovementResponse.builder()
+                .accountId(account.getId())
+                .balance(account.getBalance())
+                .build();
+    }
+
+    private Optional<Account> mapMovementRequestToAccount(MovementRequest movementRequest) {
+        return accountRepository.findById(movementRequest.getAccountId());
     }
 
 }

@@ -1,11 +1,15 @@
 package com.unsa.bank.infraestructure.controllers;
 
-import com.unsa.bank.application.ports.AccountService;
-import com.unsa.bank.domain.entities.Account;
-import com.unsa.bank.infraestructure.adapters.JpaAccountAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.unsa.bank.infraestructure.adapters.JpaAccountAdapter;
+import com.unsa.bank.application.ports.AccountService;
+import com.unsa.bank.domain.dtos.AccountRequest;
+import com.unsa.bank.domain.dtos.AccountResponse;
+import com.unsa.bank.domain.dtos.MovementRequest;
+import com.unsa.bank.domain.dtos.MovementResponse;
 
 import java.util.List;
 
@@ -18,51 +22,44 @@ public class AccountController implements JpaAccountAdapter {
 
     @Override
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Account> list() {
-        return accountService.getAll();
+    public ResponseEntity<List<AccountResponse>> list() {
+        List<AccountResponse> accounts = accountService.getAll();
+        return accounts == null ? ResponseEntity.noContent().build() : ResponseEntity.ok(accounts);
     }
 
     @Override
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Account getById(@PathVariable("id") Long id) {
-        return accountService.getAccountById(id);
+    public ResponseEntity<AccountResponse> getById(@PathVariable("id") Long id) {
+        AccountResponse account = accountService.getAccountById(id);
+        return account == null ? ResponseEntity.noContent().build() : ResponseEntity.ok(account);
     }
 
     @Override
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Account save(@RequestBody Account account) {
-        return accountService.saveAccount(account);
-    }
-
-    @Override
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Account update(@PathVariable("id") Long id, @RequestBody Account account) {
-        return accountService.updateAccount(id, account);
+    public ResponseEntity<AccountResponse> create(@RequestBody AccountRequest accountRequest) {
+        AccountResponse account = accountService.createAccount(accountRequest);
+        return account == null ? ResponseEntity.unprocessableEntity().build() : ResponseEntity.ok(account);
     }
 
     @Override
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Account delete(@PathVariable("id") Long id) {
-        return accountService.deleteAccount(id);
+    public ResponseEntity<AccountResponse> delete(@PathVariable("id") Long id) {
+        AccountResponse deletedAccount = accountService.deleteAccount(id);
+        return deletedAccount == null ? ResponseEntity.notFound().build() : ResponseEntity.accepted().body(deletedAccount);
     }
 
     @Override
-    @PostMapping("/{id}/deposit")
-    @ResponseStatus(HttpStatus.OK)
-    public Account deposit(Long id, Double amount) {
-        return accountService.addBalance(id, amount);
+    @PostMapping("/deposit")
+    public ResponseEntity<MovementResponse> deposit(@RequestBody MovementRequest movementRequest) {
+        MovementResponse movement = accountService.addBalance(movementRequest);
+        return movement == null ? ResponseEntity.unprocessableEntity().build() : ResponseEntity.accepted().body(movement);
     }
 
     @Override
-    @PostMapping("/{id}/withdraw")
-    @ResponseStatus(HttpStatus.OK)
-    public Account withdraw(Long id, Double amount) {
-        return accountService.decreaseBalance(id, amount);
+    @PostMapping("/withdraw")
+    public ResponseEntity<MovementResponse> withdraw(@RequestBody MovementRequest movementRequest) {
+        MovementResponse movement = accountService.decreaseBalance(movementRequest);
+        return movement == null ? ResponseEntity.unprocessableEntity().build() : ResponseEntity.accepted().body(movement);
     }
 
 }

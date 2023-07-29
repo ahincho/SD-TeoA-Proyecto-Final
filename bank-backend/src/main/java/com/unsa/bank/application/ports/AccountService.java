@@ -1,16 +1,19 @@
 package com.unsa.bank.application.ports;
 
-import com.unsa.bank.domain.entities.Account;
+import com.unsa.bank.domain.dtos.AccountRequest;
+import com.unsa.bank.domain.dtos.AccountResponse;
+import com.unsa.bank.domain.dtos.MovementRequest;
+import com.unsa.bank.domain.dtos.MovementResponse;
+
 import java.util.List;
 
 public interface AccountService {
 
-    List<Account> getAll();
-    Account getAccountById(Long id);
-    Account saveAccount(Account account);
-    Account updateAccount(Long id, Account account);
-    Account deleteAccount(Long id);
-    Account addBalance(Long id, Double balance);
-    Account decreaseBalance(Long id, Double balance);
+    List<AccountResponse> getAll();
+    AccountResponse getAccountById(Long id);
+    AccountResponse createAccount(AccountRequest accountRequest);
+    AccountResponse deleteAccount(Long id);
+    MovementResponse addBalance(MovementRequest movementRequest);
+    MovementResponse decreaseBalance(MovementRequest movementRequest);
 
 }

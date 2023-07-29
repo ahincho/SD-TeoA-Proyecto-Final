@@ -1,17 +1,21 @@
 package com.unsa.bank.infraestructure.adapters;
 
-import com.unsa.bank.domain.entities.Account;
+import org.springframework.http.ResponseEntity;
+
+import com.unsa.bank.domain.dtos.AccountRequest;
+import com.unsa.bank.domain.dtos.AccountResponse;
+import com.unsa.bank.domain.dtos.MovementRequest;
+import com.unsa.bank.domain.dtos.MovementResponse;
 
 import java.util.List;
 
 public interface JpaAccountAdapter {
 
-    List<Account> list();
-    Account getById(Long id);
-    Account save(Account user);
-    Account update(Long id, Account user);
-    Account delete(Long id);
-    Account deposit(Long id, Double amount);
-    Account withdraw(Long id, Double amount);
+    ResponseEntity<List<AccountResponse>> list();
+    ResponseEntity<AccountResponse> getById(Long id);
+    ResponseEntity<AccountResponse> create(AccountRequest accountRequest);
+    ResponseEntity<AccountResponse> delete(Long id);
+    ResponseEntity<MovementResponse> deposit(MovementRequest movementRequest);
+    ResponseEntity<MovementResponse> withdraw(MovementRequest movementRequest);
 
 }
