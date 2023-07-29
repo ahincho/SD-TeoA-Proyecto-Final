@@ -1,0 +1,32 @@
+### Springboot Distributed Banking Application
+### Run this Command on Terminal to Create the Docker Containers
+### > docker compose up
+version: '3.8'
+services:
+  ### First Bank - Arequipa
+  bank-arequipa:
+    container_name: bank-arequipa
+    image: springboot-bank:3.0
+    restart: unless-stopped
+    ports:
+      - "8085:8085"
+    expose:
+      - 8085
+  ### Second Bank - Lima
+  bank-lima:
+    container_name: bank-lima
+    image: springboot-bank:3.0
+    restart: unless-stopped
+    ports:
+      - "8086:8085"
+    expose:
+      - 8085
+  ### Third Bank - Cusco
+  bank-cusco:
+    container_name: bank-cusco
+    image: springboot-bank:3.0
+    restart: unless-stopped
+    ports:
+      - "8087:8085"
+    expose:
+      - 8085
