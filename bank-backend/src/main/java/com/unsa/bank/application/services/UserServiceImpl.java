@@ -49,8 +49,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse saveUser(UserRequest userRequest) {
+        Optional<User> optionalUser = userRepository.findByDocumentOrEmail(userRequest.getDocument(), userRequest.getEmail());
+        if (optionalUser.isPresent()) { return null; }
         User savedUser = userRepository.save(mapUserRequestToUser(userRequest));
-        savedUser.setAccounts(new HashSet<Account>());
+        savedUser.setAccounts(new HashSet<>());
         return mapUserToUserResponse(savedUser);
     }
 

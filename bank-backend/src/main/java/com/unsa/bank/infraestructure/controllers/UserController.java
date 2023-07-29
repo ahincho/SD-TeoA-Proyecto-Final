@@ -51,7 +51,10 @@ public class UserController implements JpaUserAdapter {
     @Override
     @PostMapping
     public ResponseEntity<UserResponse> save(@RequestBody UserRequest user) {
-        UserResponse createdUser = userService.saveUser(user);
+        UserResponse createdUser  = userService.saveUser(user);
+        if (createdUser == null) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
