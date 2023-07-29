@@ -1,3 +1,5 @@
+# Package This Project Using Maven Running this Command on Terminal
+# > mvn package
 # Run this Command on Terminal to Create the Docker Image
 # > docker build -t springboot-bank:3.0 .
 FROM openjdk:17
