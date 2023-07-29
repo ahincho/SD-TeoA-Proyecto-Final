@@ -1,6 +1,7 @@
 package com.unsa.bank.domain.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.*;
 
@@ -17,10 +18,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String email;
+    @NotNull
     private String password;
+    @NotNull
     private String document;
+    @NotNull
     private String firstname;
+    @NotNull
     private String lastname;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
