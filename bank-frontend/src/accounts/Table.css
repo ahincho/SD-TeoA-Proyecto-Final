@@ -1,0 +1,14 @@
+.accounts-table {
+    padding: 30px;
+}
+
+table td,
+table th {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.card {
+    border-radius: .5rem;
+}
