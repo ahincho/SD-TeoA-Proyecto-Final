@@ -40,7 +40,7 @@ function Table({ bankName, apiUrl, userId }) {
 			console.error('Error creating account: ', error);
 		}
 	};
-	// Deposit into a Bank Account
+	// Deposit Money to the Selected Account
 	const handleDeposit = async (accountId) => {
 		try {
 			const depositAmount = parseFloat(prompt('Ingrese el monto a depositar:', '0'));
@@ -61,23 +61,21 @@ function Table({ bankName, apiUrl, userId }) {
 			console.error('Error depositing amount: ', error);
 		}
 	};
+	// Withdraw Money to the Selected Account
 	const handleWithdraw = async (accountId) => {
 		try {
 			const withdrawAmount = parseFloat(prompt('Ingrese el monto a retirar:', '0'));
 			if (isNaN(withdrawAmount)) {
 				throw new Error('El monto ingresado no es válido.');
 			}
-
 			const response = await fetch(apiUrl + "/withdraw", {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ accountId, amount: withdrawAmount })
 			});
-
 			if (!response.ok) {
 				throw new Error('Failed to withdraw amount.');
 			}
-
 			console.log('Withdrawal successful.');
 			// Recargar la página después del retiro
 			window.location.reload();
@@ -118,7 +116,7 @@ function Table({ bankName, apiUrl, userId }) {
 															<button className="btn btn-sm btn-primary" onClick={() => handleDeposit(account.id)}>Deposit</button>
 														</td>
 														<td>
-														<button className="btn btn-sm btn-danger" type="button" onClick={() => handleWithdraw(account.id)}>Withdraw</button>
+															<button className="btn btn-sm btn-danger" type="button" onClick={() => handleWithdraw(account.id)}>Withdraw</button>
 														</td>
 													</tr>
 												))
