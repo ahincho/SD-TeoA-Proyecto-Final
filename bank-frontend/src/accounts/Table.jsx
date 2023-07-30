@@ -25,7 +25,7 @@ function Table({ bankName, apiUrl }) {
 	}, [apiUrl]);
 	return (
 		<div className="accounts-table">
-			<div className="container">
+			<div class="container-fluid">
 				<div className="row justify-content-center">
 					<div className="col-12">
 						<div className="card">

@@ -2,7 +2,7 @@ import './Register.css'
 
 function Register() {
 	return (
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-10 col-xl-9 mx-auto">
 					<div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
