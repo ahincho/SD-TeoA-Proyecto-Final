@@ -41,6 +41,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public List<AccountResponse> getAccountsByUserId(AccountRequest accountRequest) {
+        List<Account> accounts = accountRepository.getAccountsByUserId(accountRequest.getUserId());
+        return accounts.stream().map(this::mapAccountToAccountResponse).toList();
+    }
+
+    @Override
     public AccountResponse createAccount(AccountRequest accountRequest) {
         Optional<User> optionalUser = userRepository.findById(accountRequest.getUserId());
         if (optionalUser.isEmpty()) {

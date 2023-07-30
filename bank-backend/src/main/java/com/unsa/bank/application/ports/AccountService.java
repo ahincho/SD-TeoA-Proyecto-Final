@@ -11,6 +11,7 @@ public interface AccountService {
 
     List<AccountResponse> getAll();
     AccountResponse getAccountById(Long id);
+    List<AccountResponse> getAccountsByUserId(AccountRequest accountRequest);
     AccountResponse createAccount(AccountRequest accountRequest);
     AccountResponse deleteAccount(Long id);
     MovementResponse addBalance(MovementRequest movementRequest);

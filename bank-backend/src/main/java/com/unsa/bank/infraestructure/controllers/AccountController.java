@@ -35,6 +35,13 @@ public class AccountController implements JpaAccountAdapter {
     }
 
     @Override
+    @PostMapping("/u")
+    public ResponseEntity<List<AccountResponse>> getByUserId(@RequestBody AccountRequest accountRequest) {
+        List<AccountResponse> accounts = accountService.getAccountsByUserId(accountRequest);
+        return accounts.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(accounts);
+    }
+
+    @Override
     @PostMapping
     public ResponseEntity<AccountResponse> create(@RequestBody AccountRequest accountRequest) {
         AccountResponse account = accountService.createAccount(accountRequest);

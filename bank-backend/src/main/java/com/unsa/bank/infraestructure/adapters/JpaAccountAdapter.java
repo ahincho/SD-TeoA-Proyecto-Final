@@ -13,6 +13,7 @@ public interface JpaAccountAdapter {
 
     ResponseEntity<List<AccountResponse>> list();
     ResponseEntity<AccountResponse> getById(Long id);
+    ResponseEntity<List<AccountResponse>> getByUserId(AccountRequest accountRequest);
     ResponseEntity<AccountResponse> create(AccountRequest accountRequest);
     ResponseEntity<AccountResponse> delete(Long id);
     ResponseEntity<MovementResponse> deposit(MovementRequest movementRequest);
