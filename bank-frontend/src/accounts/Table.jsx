@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import './Table.css'
 
-function Table({ bankName, apiUrl }) {
+function Table({ bankName, apiUrl, userId }) {
 	const [accounts, setAccounts] = useState([]);
-	const userId = 2;
+	// Get the User Bank Accounts
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch(apiUrl, {
+				const response = await fetch(apiUrl + "/u", {
 					method: "POST",
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ userId })
 				});
 				if (!response.ok) {
-					throw new Error("Network responser wasnt ok.");
+					throw new Error("Network response wasnt ok.");
 				}
 				const data = await response.json();
 				setAccounts(data);
@@ -22,17 +22,80 @@ function Table({ bankName, apiUrl }) {
 			}
 		};
 		fetchData();
-	}, [apiUrl]);
+	},);
+	// Create a New Account
+	const handleCreateBankAccount = async () => {
+		try {
+			const response = await fetch(apiUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ userId })
+			});
+			if (!response.ok) {
+				throw new Error('Failed to create account.');
+			}
+			console.log('Account created successfully.');
+			window.location.reload();
+		} catch (error) {
+			console.error('Error creating account: ', error);
+		}
+	};
+	// Deposit into a Bank Account
+	const handleDeposit = async (accountId) => {
+		try {
+			const depositAmount = parseFloat(prompt('Ingrese el monto a depositar:', '0'));
+			if (isNaN(depositAmount)) {
+				throw new Error('El monto ingresado no es válido.');
+			}
+			const response = await fetch(apiUrl + "/deposit", {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ accountId, amount: depositAmount })
+			});
+			if (!response.ok) {
+				throw new Error('Failed to deposit amount.');
+			}
+			console.log('Deposit successful.');
+			window.location.reload();
+		} catch (error) {
+			console.error('Error depositing amount: ', error);
+		}
+	};
+	const handleWithdraw = async (accountId) => {
+		try {
+			const withdrawAmount = parseFloat(prompt('Ingrese el monto a retirar:', '0'));
+			if (isNaN(withdrawAmount)) {
+				throw new Error('El monto ingresado no es válido.');
+			}
+
+			const response = await fetch(apiUrl + "/withdraw", {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ accountId, amount: withdrawAmount })
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to withdraw amount.');
+			}
+
+			console.log('Withdrawal successful.');
+			// Recargar la página después del retiro
+			window.location.reload();
+		} catch (error) {
+			console.error('Error withdrawing amount: ', error);
+		}
+	};
 	return (
-		<div className="accounts-table">
+		<div class="accounts-table">
 			<div class="container-fluid">
-				<div className="row justify-content-center">
-					<div className="col-12">
-						<div className="card">
-							<div className="card-body">
+				<div class="row justify-content-center">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-body">
 								<h3>{bankName} Accounts</h3>
-								<div className="table-responsive">
-									<table className="table table-hover mb-0">
+								<button className="btn btn-success" onClick={handleCreateBankAccount}>Create Account</button>
+								<div class="table-responsive">
+									<table class="table table-hover mb-0">
 										<thead>
 											<tr>
 												<th scope="col">Account ID</th>
@@ -46,16 +109,16 @@ function Table({ bankName, apiUrl }) {
 										<tbody>
 											{
 												accounts.map((account) => (
-													<tr key={account.id} className="align-items-center">
+													<tr key={account.id} class="align-items-center">
 														<td>{account.id}</td>
 														<td>{account.creationDate}</td>
 														<td>{account.updateDate}</td>
 														<td>{account.balance}</td>
 														<td>
-															<button class="btn btn-sm btn-primary" type="submit">Deposit</button>
+															<button className="btn btn-sm btn-primary" onClick={() => handleDeposit(account.id)}>Deposit</button>
 														</td>
 														<td>
-															<button class="btn btn-sm btn-danger" type="submit">Withdraw</button>
+														<button className="btn btn-sm btn-danger" type="button" onClick={() => handleWithdraw(account.id)}>Withdraw</button>
 														</td>
 													</tr>
 												))
