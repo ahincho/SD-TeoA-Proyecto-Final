@@ -22,7 +22,7 @@ function Table({ bankName, apiUrl, userId }) {
 			}
 		};
 		fetchData();
-	},);
+	}, [apiUrl, userId]);
 	// Create a New Account
 	const handleCreateBankAccount = async () => {
 		try {
@@ -43,9 +43,9 @@ function Table({ bankName, apiUrl, userId }) {
 	// Deposit Money to the Selected Account
 	const handleDeposit = async (accountId) => {
 		try {
-			const depositAmount = parseFloat(prompt('Ingrese el monto a depositar:', '0'));
+			const depositAmount = parseFloat(prompt('Enter the amount to deposit:', '0'));
 			if (isNaN(depositAmount)) {
-				throw new Error('El monto ingresado no es válido.');
+				throw new Error('The amount is invalid.');
 			}
 			const response = await fetch(apiUrl + "/deposit", {
 				method: 'POST',
@@ -64,9 +64,9 @@ function Table({ bankName, apiUrl, userId }) {
 	// Withdraw Money to the Selected Account
 	const handleWithdraw = async (accountId) => {
 		try {
-			const withdrawAmount = parseFloat(prompt('Ingrese el monto a retirar:', '0'));
+			const withdrawAmount = parseFloat(prompt('Enter the amount to withdraw:', '0'));
 			if (isNaN(withdrawAmount)) {
-				throw new Error('El monto ingresado no es válido.');
+				throw new Error('The amount is invalid.');
 			}
 			const response = await fetch(apiUrl + "/withdraw", {
 				method: 'POST',
@@ -77,7 +77,6 @@ function Table({ bankName, apiUrl, userId }) {
 				throw new Error('Failed to withdraw amount.');
 			}
 			console.log('Withdrawal successful.');
-			// Recargar la página después del retiro
 			window.location.reload();
 		} catch (error) {
 			console.error('Error withdrawing amount: ', error);
