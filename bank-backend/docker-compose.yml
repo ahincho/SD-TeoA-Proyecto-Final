@@ -1,6 +1,6 @@
 ### Springboot Distributed Banking Application
 ### Run this Command on Terminal to Create the Docker Containers
-### > docker compose up .
+### > docker compose up
 version: '3.8'
 services:
   ### First Bank - Arequipa
