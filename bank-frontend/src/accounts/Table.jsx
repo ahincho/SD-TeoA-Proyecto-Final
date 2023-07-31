@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import './Table.css'
 
-function Table({ bankName, apiUrl, userId }) {
+function Table({ bankName, apiUrl, document }) {
 	const [accounts, setAccounts] = useState([]);
 	// Get the User Bank Accounts
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch(apiUrl + "/u", {
+				const response = await fetch(apiUrl + "/d", {
 					method: "POST",
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ userId })
+					body: JSON.stringify({ document })
 				});
 				if (!response.ok) {
 					throw new Error("Network response wasnt ok.");
@@ -18,18 +18,18 @@ function Table({ bankName, apiUrl, userId }) {
 				const data = await response.json();
 				setAccounts(data);
 			} catch (error) {
-				console.error("Error fetching data: ", error);
+				console.error("Error fetching data.");
 			}
 		};
 		fetchData();
-	}, [apiUrl, userId]);
+	}, [apiUrl, document]);
 	// Create a New Account
 	const handleCreateBankAccount = async () => {
 		try {
 			const response = await fetch(apiUrl, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ userId })
+				body: JSON.stringify({ document })
 			});
 			if (!response.ok) {
 				throw new Error('Failed to create account.');
@@ -37,7 +37,7 @@ function Table({ bankName, apiUrl, userId }) {
 			console.log('Account created successfully.');
 			window.location.reload();
 		} catch (error) {
-			console.error('Error creating account: ', error);
+			console.error('Error creating account.');
 		}
 	};
 	// Deposit Money to the Selected Account
@@ -58,7 +58,7 @@ function Table({ bankName, apiUrl, userId }) {
 			console.log('Deposit successful.');
 			window.location.reload();
 		} catch (error) {
-			console.error('Error depositing amount: ', error);
+			console.error('Error depositing amount.');
 		}
 	};
 	// Withdraw Money to the Selected Account
@@ -79,20 +79,20 @@ function Table({ bankName, apiUrl, userId }) {
 			console.log('Withdrawal successful.');
 			window.location.reload();
 		} catch (error) {
-			console.error('Error withdrawing amount: ', error);
+			console.error('Error withdrawing amount.');
 		}
 	};
 	return (
-		<div class="accounts-table">
-			<div class="container-fluid">
-				<div class="row justify-content-center">
-					<div class="col-12">
-						<div class="card">
-							<div class="card-body">
+		<div className="accounts-table">
+			<div className="container-fluid">
+				<div className="row justify-content-center">
+					<div className="col-12">
+						<div className="card">
+							<div className="card-body">
 								<h3>{bankName} Accounts</h3>
 								<button className="btn btn-success" onClick={handleCreateBankAccount}>Create Account</button>
-								<div class="table-responsive">
-									<table class="table table-hover mb-0">
+								<div className="table-responsive">
+									<table className="table table-hover mb-0">
 										<thead>
 											<tr>
 												<th scope="col">Account ID</th>
@@ -106,7 +106,7 @@ function Table({ bankName, apiUrl, userId }) {
 										<tbody>
 											{
 												accounts.map((account) => (
-													<tr key={account.id} class="align-items-center">
+													<tr key={account.id} className="align-items-center">
 														<td>{account.id}</td>
 														<td>{account.creationDate}</td>
 														<td>{account.updateDate}</td>
