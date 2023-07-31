@@ -1,8 +1,5 @@
 package com.unsa.bank.application.services;
 
-import com.unsa.bank.domain.dtos.MovementRequest;
-import com.unsa.bank.domain.dtos.MovementResponse;
-
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -10,10 +7,9 @@ import lombok.AllArgsConstructor;
 import jakarta.transaction.Transactional;
 
 import com.unsa.bank.application.ports.AccountService;
+import com.unsa.bank.domain.dtos.*;
 import com.unsa.bank.domain.repositories.AccountRepository;
 import com.unsa.bank.domain.repositories.UserRepository;
-import com.unsa.bank.domain.dtos.AccountRequest;
-import com.unsa.bank.domain.dtos.AccountResponse;
 import com.unsa.bank.domain.entities.Account;
 import com.unsa.bank.domain.entities.User;
 
@@ -47,8 +43,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountResponse createAccount(AccountRequest accountRequest) {
-        Optional<User> optionalUser = userRepository.findById(accountRequest.getUserId());
+    public List<AccountResponse> getAccountsByUserDocument(DocumentRequest documentRequest) {
+        Optional<User> optionalUser = userRepository.findByDocument(documentRequest.getDocument());
+        if (optionalUser.isEmpty()) {
+            return null;
+        }
+        List<Account> accounts = accountRepository.getAccountsByUserId(optionalUser.get().getId());
+        return accounts.stream().map(this::mapAccountToAccountResponse).toList();
+    }
+
+    @Override
+    public AccountResponse createAccount(DocumentRequest documentRequest) {
+        Optional<User> optionalUser = userRepository.findByDocument(documentRequest.getDocument());
         if (optionalUser.isEmpty()) {
             return null;
         }

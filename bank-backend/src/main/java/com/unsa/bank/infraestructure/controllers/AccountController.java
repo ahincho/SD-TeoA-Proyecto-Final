@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.unsa.bank.infraestructure.adapters.JpaAccountAdapter;
 import com.unsa.bank.application.ports.AccountService;
-import com.unsa.bank.domain.dtos.AccountRequest;
-import com.unsa.bank.domain.dtos.AccountResponse;
-import com.unsa.bank.domain.dtos.MovementRequest;
-import com.unsa.bank.domain.dtos.MovementResponse;
+import com.unsa.bank.domain.dtos.*;
 
 import java.util.List;
 
@@ -42,9 +39,16 @@ public class AccountController implements JpaAccountAdapter {
     }
 
     @Override
+    @PostMapping("/d")
+    public ResponseEntity<List<AccountResponse>> getByUserDocument(@RequestBody DocumentRequest documentRequest) {
+        List<AccountResponse> accounts = accountService.getAccountsByUserDocument(documentRequest);
+        return accounts.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(accounts);
+    }
+
+    @Override
     @PostMapping
-    public ResponseEntity<AccountResponse> create(@RequestBody AccountRequest accountRequest) {
-        AccountResponse account = accountService.createAccount(accountRequest);
+    public ResponseEntity<AccountResponse> create(@RequestBody DocumentRequest documentRequest) {
+        AccountResponse account = accountService.createAccount(documentRequest);
         return account == null ? ResponseEntity.unprocessableEntity().build() : ResponseEntity.ok(account);
     }
 
