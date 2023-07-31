@@ -20,7 +20,7 @@ function Register({ bankName, apiUrl }) {
 				throw new Error('Failed to register.');
 			}
 			console.log('Registration successful.');
-			window.location.href = `/${bankName}/login`;
+			window.location.href = `/${bankName.toLowerCase()}/login`;
 		} catch (error) {
 			console.error('Error registering: ', error);
 			alert('Registration failed. Please try again later.');
@@ -34,9 +34,9 @@ function Register({ bankName, apiUrl }) {
 						<div className="card-img-left d-none d-md-flex">
 							{/* Background image for card set in CSS! */}
 						</div>
-						<div className="card-body p-4 p-sm-5" onSubmit={handleSubmit}>
+						<div className="card-body p-4 p-sm-5">
 							<h5 className="card-title text-center mb-5 fw-light fs-5"><strong>{bankName} Bank - Register</strong></h5>
-							<form>
+							<form onSubmit={handleSubmit}>
 								<div className="form-floating mb-3">
 									<input type="email" className="form-control" id="floatingInputEmail" placeholder="name@example.com" required autoFocus />
 									<label htmlFor="floatingInputEmail">Email Address</label>
