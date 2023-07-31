@@ -1,32 +1,58 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
-import './index.css'
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import Register from './register/Register'
-import Login from './login/Login'
-import Accounts from './accounts/Accounts';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import reportWebVitals from "./reportWebVitals";
+import "./index.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Register from "./register/Register";
+import Login from "./login/Login";
+import Accounts from "./accounts/Accounts";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Register/>
+    path: "/arequipa",
+    element: (
+      <Register bankName="Arequipa" apiUrl="http://localhost:8085/api/users" />
+    ),
   },
   {
-    path: "/login",
-    element: <Login/>
+    path: "/lima",
+    element: (
+      <Register bankName="Lima" apiUrl="http://localhost:8086/api/users" />
+    ),
+  },
+  {
+    path: "/cusco",
+    element: (
+      <Register bankName="Cusco" apiUrl="http://localhost:8087/api/users" />
+    ),
+  },
+  {
+    path: "/arequipa/login",
+    element: (
+      <Login bankName="Arequipa" apiUrl="http://localhost:8085/api/users" />
+    ),
+  },
+  {
+    path: "/lima/login",
+    element: <Login bankName="Lima" apiUrl="http://localhost:8086/api/users" />,
+  },
+  {
+    path: "/cusco/login",
+    element: (
+      <Login bankName="Cusco" apiUrl="http://localhost:8087/api/users" />
+    ),
   },
   {
     path: "/:userId/accounts",
-    element: <Accounts/>
-  }
-])
+    element: <Accounts />,
+  },
+]);
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router = { router }/>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
