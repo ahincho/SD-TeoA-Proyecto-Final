@@ -1,5 +1,6 @@
 package com.unsa.bank.infraestructure.controllers;
 
+import com.unsa.bank.domain.dtos.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +44,8 @@ public class UserController implements JpaUserAdapter {
 
     @Override
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> getByEmailAndPassword(@RequestBody String email, @RequestBody String password) {
-        UserResponse user = userService.getUserByEmailAndPassword(email, password);
+    public ResponseEntity<UserResponse> getByEmailAndPassword(@RequestBody LoginRequest loginRequest) {
+        UserResponse user = userService.getUserByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
         return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
     }
 
