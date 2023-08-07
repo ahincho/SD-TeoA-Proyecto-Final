@@ -16,7 +16,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3002")
+                        .allowedOrigins("http://localhost:3000", "http://localhost:3010", "http://localhost:3011", "http://localhost:3012")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .maxAge(3600);
             }
